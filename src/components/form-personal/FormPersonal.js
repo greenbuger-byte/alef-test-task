@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
@@ -18,7 +18,6 @@ import {
     StyledForm,
     StyledInput
 } from "./FormPersonal.styles";
-
 
 const FormPersonal = (props) => {
     const { setForm } = props;
@@ -62,8 +61,10 @@ const FormPersonal = (props) => {
 
     const renderErrors = (field) =>errors?.parent && errors?.parent[field]?.message;
 
+    const removeChild = (id) =>   fields.length === 1 ? remove() : remove(id);
+
     const renderChildFields = fields.map((field, index) => (
-            <ChildrenInputs key={field.id}>
+            <ChildrenInputs key={index}>
                 <ChildControl>
                     <StyledInput
                         key={field.id}
@@ -83,7 +84,7 @@ const FormPersonal = (props) => {
                         {...register(`child.age.${index}.value`, errorAgeValidation)}
                     />
                 </ChildControl>
-                <Button onClick={() =>remove(index)} variant="ghost" label={t('button.remove')} />
+                <Button onClick={() =>removeChild(index)} variant="ghost" label={t('button.remove')} />
             </ChildrenInputs>
         ));
 
@@ -110,7 +111,7 @@ const FormPersonal = (props) => {
                 <FormPersonalTitle>{t('title.child_max')}</FormPersonalTitle>
                 <Button
                     icon="Plus"
-                    disabled={Object.values(errors).length || fields.length > 4}
+                    disabled={errors?.child|| fields.length > 4}
                     onClick={() => append({name: "children"})}
                     variant={"outlined"}
                     label={t('label.add_child')}
